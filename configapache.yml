@@ -1,0 +1,35 @@
+---
+- hosts: webserver
+  become: yes
+  tasks:
+    - name: Tao file cau hinh VirtualHost cho WordPress
+      copy:
+        dest: /etc/apache2/sites-available/wordpress.conf
+        content: |
+          <VirtualHost *:80>
+              DocumentRoot /srv/www/wordpress
+              <Directory /srv/www/wordpress>
+                  Options FollowSymLinks
+                  AllowOverride Limit Options FileInfo
+                  DirectoryIndex index.php
+                  Require all granted
+              </Directory>
+              <Directory /srv/www/wordpress/wp-content>
+                  Options FollowSymLinks
+                  Require all granted
+              </Directory>
+          </VirtualHost>
+
+    - name: Kich hoat trang WordPress
+      command: a2ensite wordpress
+
+    - name: Kich hoat module rewrite
+      command: a2enmod rewrite
+
+    - name: Vo hieu hoa trang mac dinh
+      command: a2dissite 000-default
+
+    - name: Tai lai Apache
+      service:
+        name: apache2
+        state: reloaded

@@ -1,0 +1,21 @@
+---
+- hosts: webserver
+  become: yes
+  tasks:
+    - name: Tạo thư mục /srv/www với quyền truy cập đầy đủ
+      file:
+        path: /srv/www
+        state: directory
+        mode: '0777'
+
+    - name: Tải về và giải nén WordPress
+      command: curl https://wordpress.org/latest.tar.gz | tar zx -C /srv/www
+      args:
+        creates: /srv/www/wordpress
+
+    - name: Thay đổi quyền sở hữu thư mục /srv/www cho www-data
+      file:
+        path: /srv/www
+        owner: www-data
+        group: www-data
+        recurse: yes

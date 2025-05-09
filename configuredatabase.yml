@@ -1,0 +1,41 @@
+---
+- hosts: db
+  become: yes
+  tasks:
+    - name: Cai python
+      apt:
+        name:
+          - python3-pip
+          - python3-dev
+          - python3-pymysql
+        state: present
+      become: yes
+
+    - name: Tao database wordpress
+      mysql_db:
+        name: wordpress
+        state: present
+        login_user: root
+        login_password: "Thu4n@th3n"
+      become: yes
+
+    - name: Tao nguoi dung wordpress voi mat khau
+      mysql_user:
+        name: wordpress
+        host: '%'
+        password: "wordpress"
+        priv: "wordpress.*:ALL"
+        state: present
+        login_user: root
+        login_password: "Thu4n@th3n"
+
+    - name: Flush privileges
+      mysql_query:
+        query: "FLUSH PRIVILEGES;"
+        login_user: root
+        login_password: "Thu4n@th3n"
+
+    - name: Khoi dong lai dich vu MySQL
+      service:
+        name: mysql
+        state: restarted

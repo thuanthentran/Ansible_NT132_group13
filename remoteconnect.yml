@@ -1,0 +1,19 @@
+---
+- hosts: db
+  become: yes
+  tasks:
+    - name: Cập nhật bind-address trong mysqld.cnf thành 0.0.0.0
+      become: yes
+      lineinfile:
+        path: /etc/mysql/mysql.conf.d/mysqld.cnf
+        regexp: '^bind-address'
+        line: 'bind-address = 0.0.0.0'
+        backup: yes
+
+    - name: Khoi dong lai MySQL
+      service:
+        name: mysql
+        state: restarted
+
+    - name: Cho phep truy cap tuong lua tren cong 3306
+      command: ufw allow 3306

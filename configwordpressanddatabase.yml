@@ -1,0 +1,35 @@
+---
+- hosts: webserver
+  become: yes
+  tasks:
+    - name: Sao chep file cau hinh WordPress
+      copy:
+        src: /srv/www/wordpress/wp-config-sample.php
+        dest: /srv/www/wordpress/wp-config.php
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: Cap nhat database trong wp-config.php
+      replace:
+        path: /srv/www/wordpress/wp-config.php
+        regexp: "database_name_here"
+        replace: "wordpress"
+
+    - name: Cap nhat ten nguoi dung trong wp-config.php
+      replace:
+        path: /srv/www/wordpress/wp-config.php
+        regexp: "username_here"
+        replace: "wordpress"
+
+    - name: Cap nhat mat khau trong wp-config.php
+      replace:
+        path: /srv/www/wordpress/wp-config.php
+        regexp: "password_here"
+        replace: "wordpress"
+
+    - name: Cap nhat dia chi MySQL trong wp-config.php
+      replace:
+        path: /srv/www/wordpress/wp-config.php
+        regexp: "localhost"
+        replace: "192.168.18.129"

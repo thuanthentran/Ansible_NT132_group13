@@ -1,0 +1,29 @@
+---
+- name: Cai dat Apache, PHP va MySQL tren Ubuntu
+  hosts: all
+  become: true
+  tasks:
+    - name: Cap nhat danh sach goi
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Cai dat Apache, MySQL, PHP va cac phan mo rong can thiet
+      apt:
+        name:
+          - apache2
+          - ghostscript
+          - libapache2-mod-php
+          - mysql-server
+          - php
+          - php-bcmath
+          - php-curl
+          - php-imagick
+          - php-intl
+          - php-json
+          - php-mbstring
+          - php-mysql
+          - php-xml
+          - php-zip
+        state: present
+        install_recommends: yes
